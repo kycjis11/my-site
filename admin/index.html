@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>문의함 · 관리자</title>
+<style>
+  :root { --ink:#0F2633; --deep:#0A1C25; --brass:#C9A45C; --bone:#E7EAE4; --mist:#8FA3A8; --line:rgba(231,234,228,.16); --warn:#F0A58C; }
+  [hidden] { display: none !important; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ink); color: var(--bone); font: 16px/1.6 "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; word-break: keep-all; }
+  main { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.3rem; margin: 0 0 20px; }
+  :focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+  input[type=password] { width: 100%; font: inherit; color: var(--bone); background: var(--deep); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; min-height: 50px; }
+  button { font: inherit; min-height: 48px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--bone); cursor: pointer; }
+  .primary { background: var(--brass); color: var(--ink); border-color: var(--brass); font-weight: 600; }
+  .login { display: grid; gap: 12px; }
+  .msg { min-height: 1.6em; color: var(--warn); margin: 0; }
+  .count { display: flex; align-items: baseline; gap: 10px; margin: 0 0 24px; }
+  .count strong { font-size: 3rem; line-height: 1; color: var(--brass); }
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .card { background: var(--deep); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+  .card.is-new { border-color: rgba(201,164,92,.6); }
+  .meta { color: var(--mist); font-size: .92rem; margin: 0 0 6px; }
+  .name { font-weight: 600; font-size: 1.1rem; margin: 0; }
+  .contact { display: inline-block; margin: 4px 0 8px; color: var(--brass); background: none; border: 0; padding: 0; min-height: 0; text-decoration: underline; text-underline-offset: 3px; }
+  .target { margin: 0 0 12px; white-space: pre-wrap; }
+  .status { display: flex; gap: 8px; flex-wrap: wrap; }
+  .status button[aria-pressed=true] { background: var(--bone); color: var(--ink); border-color: var(--bone); font-weight: 600; }
+  .empty { color: var(--mist); }
+</style>
+</head>
+<body>
+<main>
+  <h1>문의함</h1>
+
+  <form id="login" class="login">
+    <label for="pw">관리자 비밀번호</label>
+    <input id="pw" type="password" autocomplete="current-password" required>
+    <button class="primary" type="submit">들어가기</button>
+    <p class="msg" id="login-msg" role="alert"></p>
+  </form>
+
+  <section id="box" hidden>
+    <p class="count"><strong id="new-count">0</strong><span>건의 새 문의</span></p>
+    <div class="bar">
+      <span class="meta" id="total"></span>
+      <span>
+        <button type="button" id="reload">새로고침</button>
+        <button type="button" id="logout">나가기</button>
+      </span>
+    </div>
+    <p class="msg" id="box-msg" role="alert"></p>
+    <ul class="list" id="list"></ul>
+  </section>
+</main>
+
+<script>
+(() => {
+  const STATUSES = ['새 문의', '연락함', '완료'];
+  const KEY = 'admin-pw';
+  const $ = (id) => document.getElementById(id);
+  const getPw = () => { try { return sessionStorage.getItem(KEY) || ''; } catch { return ''; } };
+  const setPw = (v) => { try { v ? sessionStorage.setItem(KEY, v) : sessionStorage.removeItem(KEY); } catch {} };
+  const fmt = (s) => new Date(s).toLocaleString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short', hour: '2-digit', minute: '2-digit' });
+
+  const api = async (method, body) => {
+    const r = await fetch('/api/admin', {
+      method,
+      headers: { 'x-admin-password': getPw(), ...(body ? { 'Content-Type': 'application/json' } : {}) },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const data = await r.json().catch(() => ({}));
+    if (r.status === 401) { showLogin('비밀번호가 맞지 않아요.'); throw new Error('401'); }
+    if (!r.ok) throw new Error(data.error || '불러오지 못했어요.');
+    return data;
+  };
+
+  const showLogin = (text) => {
+    setPw('');
+    $('box').hidden = true;
+    $('login').hidden = false;
+    $('login-msg').textContent = text || '';
+    $('pw').value = '';
+    $('pw').focus();
+  };
+
+  const render = (rows) => {
+    $('new-count').textContent = rows.filter((r) => r.status === '새 문의').length;
+    $('total').textContent = `전체 ${rows.length}건 · 최신순`;
+    const list = $('list');
+    list.replaceChildren();
+    if (!rows.length) {
+      const li = document.createElement('li');
+      li.className = 'empty';
+      li.textContent = '아직 들어온 문의가 없어요. 사이트의 문의 폼으로 들어온 문의가 여기에 쌓여요.';
+      list.append(li);
+      return;
+    }
+    for (const row of rows) {
+      const li = document.createElement('li');
+      li.className = 'card' + (row.status === '새 문의' ? ' is-new' : '');
+      const meta = document.createElement('p'); meta.className = 'meta'; meta.textContent = fmt(row.created_at);
+      const name = document.createElement('p'); name.className = 'name'; name.textContent = row.name;
+      const contact = document.createElement('button');
+      contact.type = 'button'; contact.className = 'contact'; contact.textContent = row.contact;
+      contact.title = '눌러서 복사';
+      contact.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(row.contact); contact.textContent = row.contact + ' (복사됨)'; setTimeout(() => (contact.textContent = row.contact), 1500); }
+        catch { const sel = getSelection(); const rg = document.createRange(); rg.selectNodeContents(contact); sel.removeAllRanges(); sel.addRange(rg); }
+      });
+      const target = document.createElement('p'); target.className = 'target'; target.textContent = row.target || '(대상 어종·출조지 없음)';
+      const st = document.createElement('div'); st.className = 'status';
+      for (const s of STATUSES) {
+        const b = document.createElement('button');
+        b.type = 'button'; b.textContent = s; b.setAttribute('aria-pressed', String(row.status === s));
+        b.addEventListener('click', async () => {
+          if (row.status === s) return;
+          try { await api('PATCH', { id: row.id, status: s }); await load(); }
+          catch (e) { if (e.message !== '401') $('box-msg').textContent = e.message; }
+        });
+        st.append(b);
+      }
+      li.append(meta, name, contact, target, st);
+      list.append(li);
+    }
+  };
+
+  const load = async () => {
+    $('box-msg').textContent = '';
+    const data = await api('GET');
+    $('login').hidden = true;
+    $('box').hidden = false;
+    render(data.rows || []);
+  };
+
+  $('login').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    setPw($('pw').value);
+    $('login-msg').textContent = '';
+    try { await load(); } catch (err) { if (err.message !== '401') showLogin(err.message); }
+  });
+  $('reload').addEventListener('click', () => load().catch((e) => { if (e.message !== '401') $('box-msg').textContent = e.message; }));
+  $('logout').addEventListener('click', () => showLogin(''));
+
+  if (getPw()) load().catch(() => {}); else $('pw').focus();
+})();
+</script>
+</body>
+</html>
