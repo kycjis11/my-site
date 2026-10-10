@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>시즌 낚시용품 · 주말 출조 장비 추천</title>
+<meta name="description" content="계절마다 잘 나가는 낚시용품을 보여 드리고, 어디서 무엇을 낚을지 알려 주시면 맞는 장비를 추천해 드려요.">
+<meta name="theme-color" content="#0F2633">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Song+Myung&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#top">시즌 낚시용품</a>
+  <nav class="topnav" aria-label="바로가기">
+    <a href="#season">시즌 장비</a>
+    <a href="#shop">매장·조황</a>
+    <a class="topnav-cta" href="#ask">장비 추천 문의</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- 첫 화면: 스크롤하면 계절 글자가 양옆으로 갈라지며 바다 그림이 드러난다 -->
+  <section class="portal" aria-label="첫 화면">
+    <div class="portal-stage">
+      <div class="scene" aria-hidden="true">
+        <svg class="scene-art" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0F2633"/>
+              <stop offset=".52" stop-color="#2B4A55"/>
+              <stop offset=".6" stop-color="#7C7A63"/>
+            </linearGradient>
+            <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#22404A"/>
+              <stop offset="1" stop-color="#0A1C25"/>
+            </linearGradient>
+            <radialGradient id="glow" cx=".5" cy=".5" r=".5">
+              <stop offset="0" stop-color="#E9C987" stop-opacity=".55"/>
+              <stop offset="1" stop-color="#E9C987" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="1600" height="1000" fill="url(#sky)"/>
+          <circle cx="1270" cy="560" r="230" fill="url(#glow)"/>
+          <circle cx="1270" cy="560" r="62" fill="#E2BD72"/>
+          <rect y="590" width="1600" height="410" fill="url(#sea)"/>
+          <g fill="none" stroke="#C9A45C" stroke-linecap="round" opacity=".55">
+            <path d="M1180 622h180M1150 650h240M1200 680h140M1140 716h260M1220 760h100" stroke-width="3"/>
+          </g>
+          <g fill="none" stroke="#8FA3A8" stroke-width="1.5" opacity=".28">
+            <path d="M0 640c120-10 240 10 360 0s240-10 360 0 240 10 360 0 240-10 360 0 240 10 160 0"/>
+            <path d="M0 720c140-12 280 12 420 0s280-12 420 0 280 12 420 0 280-12 340 0"/>
+            <path d="M0 830c160-14 320 14 480 0s320-14 480 0 320 14 480 0 160-14 160 0"/>
+          </g>
+          <!-- 낚싯대 끝에서 내려오는 줄과 에기 -->
+          <path d="M1010 0 C 990 260, 930 520, 900 730" fill="none" stroke="#E7EAE4" stroke-width="1.6" opacity=".7"/>
+          <g transform="translate(900 730) rotate(-14)">
+            <path d="M0 0 C 18 6, 30 30, 32 64 L 28 128 C 26 140, 6 140, 4 128 L 0 64 C 2 30, -14 6, 0 0Z" transform="translate(-16 0)" fill="#C9A45C"/>
+            <path d="M-12 40 l -24 30 M12 40 l 24 30" stroke="#3E7C78" stroke-width="6" stroke-linecap="round"/>
+            <g stroke="#E7EAE4" stroke-width="2" stroke-linecap="round">
+              <path d="M-6 132 l -10 18 M0 134 v 20 M6 132 l 10 18"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="doors" aria-hidden="true">
+        <div class="door door-left"></div>
+        <div class="door door-right"></div>
+      </div>
+
+      <h1 class="wordmark">
+        <span class="wm wm-left" data-season-word="0">가을</span><span class="wm wm-right" data-season-word="1">채비</span>
+        <span class="visually-hidden">— 이번 시즌 낚시 장비 추천</span>
+      </h1>
+
+      <p class="portal-hint" aria-hidden="true">아래로 내리면 바다가 열려요</p>
+
+      <div class="reveal">
+        <p class="reveal-lede">이번 주말 출조,<br>지금 계절에 맞는 장비부터 챙기세요.</p>
+        <p class="reveal-sub">어디서 무엇을 낚을지 알려 주시면 맞는 장비를 골라 드려요.</p>
+        <a class="btn btn-primary" href="#ask">장비 추천 문의</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 시즌 장비 -->
+  <section id="season" class="season">
+    <div class="wrap">
+      <h2 class="h2">계절이 바뀌면 채비도 바뀝니다</h2>
+      <p class="lead">지금 계절을 먼저 보여 드려요. 가격과 재고는 매장에 확인한 뒤 문의로 안내해 드려요.</p>
+
+      <ol class="seasons" role="list">
+        <li class="s" data-months="3,4,5">
+          <h3 class="s-name">봄</h3>
+          <p class="s-when">3~5월</p>
+          <p class="s-fish">감성돔 · 볼락</p>
+          <p class="s-gear">갯바위 찌낚시 채비, 볼락용 가벼운 루어 장비</p>
+        </li>
+        <li class="s" data-months="6,7,8">
+          <h3 class="s-name">여름</h3>
+          <p class="s-when">6~8월</p>
+          <p class="s-fish">농어 · 한치</p>
+          <p class="s-gear">농어 루어 로드와 미노우, 한치 선상 채비</p>
+        </li>
+        <li class="s" data-months="9,10,11">
+          <h3 class="s-name">가을</h3>
+          <p class="s-when">9~11월</p>
+          <p class="s-fish">주꾸미 · 갑오징어 · 무늬오징어 · 갈치</p>
+          <p class="s-gear">에깅 로드와 에기, 선상 주꾸미 채비, 갈치 채비</p>
+        </li>
+        <li class="s" data-months="12,1,2">
+          <h3 class="s-name">겨울</h3>
+          <p class="s-when">12~2월</p>
+          <p class="s-fish">감성돔 · 볼락 · 대구</p>
+          <p class="s-gear">겨울 찌낚시 채비, 볼락 라이트게임 장비, 대구 선상 지깅 채비</p>
+        </li>
+      </ol>
+      <p class="note">가격: 준비 중 — 장비별 가격은 문의 주시면 안내해 드려요.</p>
+    </div>
+  </section>
+
+  <!-- 매장·조황 -->
+  <section id="shop" class="shop">
+    <div class="wrap">
+      <h2 class="h2">직접 보고, 직접 낚은 것만 올립니다</h2>
+      <div class="frames">
+        <figure class="frame">
+          <div class="frame-empty">사진 준비 중</div>
+          <figcaption>장비·매장 사진</figcaption>
+        </figure>
+        <figure class="frame">
+          <div class="frame-empty">사진 준비 중</div>
+          <figcaption>조황·조과 사진</figcaption>
+        </figure>
+      </div>
+      <dl class="facts">
+        <div><dt>낚시 경력·운영 기간</dt><dd>준비 중</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 후기 자리 -->
+  <section class="reviews" aria-labelledby="reviews-h">
+    <div class="wrap">
+      <h2 id="reviews-h" class="h2">손님 후기</h2>
+      <p class="empty-line">아직 올린 후기가 없어요. 실제 후기가 생기면 이곳에 그대로 옮겨 둘게요.</p>
+    </div>
+  </section>
+
+  <!-- 문의 -->
+  <section id="ask" class="ask">
+    <div class="wrap ask-grid">
+      <div>
+        <h2 class="h2">장비 추천 문의</h2>
+        <p class="lead">어디서 무엇을 낚을지만 적어 주세요. 맞는 장비와 가격을 확인해서 연락드릴게요.</p>
+        <dl class="info">
+          <div><dt>가게 이름</dt><dd>준비 중</dd></div>
+          <div><dt>위치</dt><dd>준비 중</dd></div>
+          <div><dt>영업시간</dt><dd>준비 중</dd></div>
+          <div><dt>연락 방법</dt><dd>준비 중</dd></div>
+        </dl>
+      </div>
+
+      <form id="ask-form" class="form" novalidate>
+        <label class="field">
+          <span>이름</span>
+          <input name="name" autocomplete="name" maxlength="50" required>
+        </label>
+        <label class="field">
+          <span>연락처</span>
+          <input name="contact" inputmode="tel" autocomplete="tel" maxlength="100" placeholder="전화번호 또는 카카오톡 아이디" required>
+        </label>
+        <label class="field">
+          <span>대상 어종·출조지</span>
+          <textarea name="target" rows="3" maxlength="1000" placeholder="예) 이번 주말 서해 선상에서 주꾸미"></textarea>
+        </label>
+        <label class="hp" aria-hidden="true">웹사이트<input name="website" tabindex="-1" autocomplete="off"></label>
+        <label class="consent">
+          <input type="checkbox" name="consent" required>
+          <span>(필수) 장비 추천 연락을 위해 이름·연락처·문의 내용을 수집하고, 상담이 끝나면 1년 안에 지웁니다. 이에 동의합니다.</span>
+        </label>
+        <button class="btn btn-primary" type="submit">장비 추천 문의 보내기</button>
+        <p class="form-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>시즌 낚시용품 — 가게 정보는 준비 중이에요.</p>
+  </div>
+</footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
